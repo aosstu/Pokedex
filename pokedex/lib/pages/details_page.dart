@@ -60,37 +60,57 @@ class _DetailsPageState extends State<DetailsPage> {
             ),
           // Detalles del Pokémon
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Nombre: ${widget.pokemon['nombre']}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              padding: const EdgeInsets.all(16.0),
+              child: Card(
+                elevation: 4, // Sombra de la tarjeta
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15), // Borde redondeado
+                  // Borde azul
                 ),
-                SizedBox(height: 8),
-                Text(
-                  'Tipo: ${widget.pokemon['tipo']}',
-                  style: TextStyle(fontSize: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(children: [
+                    Text(
+                      '${widget.pokemon['nombre']}',
+                      style: TextStyle(
+                        fontSize: 20, // Tamaño de fuente grande
+                        fontWeight: FontWeight.bold, // Texto en negrita
+                        color: Colors.black, // Color verde para el tipo
+                        fontFamily: 'Roboto', // Ejemplo de fuente personalizada
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Tipo: ${widget.pokemon['tipo']}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.green,
+                      ),
+                    ), // Espacio entre textos
+                    Text(
+                      'Altura: ${widget.pokemon['altura']}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    Text(
+                      'Categoría: ${widget.pokemon['categoria']}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.orange,
+                      ),
+                    ),
+                    Text(
+                      'Peso: ${widget.pokemon['peso']}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.purple,
+                      ),
+                    ),
+                  ]),
                 ),
-                SizedBox(height: 8),
-                Text(
-                  'Altura: ${widget.pokemon['altura']}',
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Categoría: ${widget.pokemon['categoria']}',
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Peso: ${widget.pokemon['peso']}',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-          ),
+              ))
         ],
       ),
     );
