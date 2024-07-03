@@ -10,6 +10,8 @@ class TabMisPokemons extends StatefulWidget {
 class _TabMisPokemonsState extends State<TabMisPokemons> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Center(
+      child: Text('Mis pokemons'),
+    );
   }
 }
