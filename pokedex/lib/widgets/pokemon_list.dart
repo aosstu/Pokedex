@@ -45,8 +45,7 @@ class PokemonList extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => DetailsPage(
-                          pokemonNombre: pokemon['nombre'],
-                          id: pokemon.toString()),
+                          pokemonNombre: pokemon['nombre'], pokemon: pokemon),
                     ));
               }),
         );

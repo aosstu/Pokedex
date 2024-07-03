@@ -4,6 +4,7 @@ import 'package:pokedex/services/firestore_service.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pokedex/widgets/appbar.dart';
 import 'package:pokedex/widgets/pokemon_list.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
