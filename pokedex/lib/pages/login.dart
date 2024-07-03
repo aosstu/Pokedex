@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, unnecessary_null_comparison
 import 'dart:ui';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pokedex/pages/home_page.dart';
@@ -16,28 +17,45 @@ class _LoginScreenState extends State<LoginScreen> {
   late String email;
   late String password;
   String errorMessage = '';
+  String _imageUrl = '';
+  Future<void> _searchImage(String searchText) async {
+    // Normalizar el texto de entrada
+    final normalizedText = searchText.trim();
+
+    // Buscar la imagen en Firebase Storage
+    final storageRef =
+        FirebaseStorage.instance.ref().child('fondo/$normalizedText.jpg');
+
+    try {
+      final downloadUrl = await storageRef.getDownloadURL();
+      setState(() {
+        _imageUrl = downloadUrl;
+      });
+    } catch (e) {
+      print('Error al buscar la imagen: $e');
+      setState(() {
+        _imageUrl =
+            'https://firebasestorage.googleapis.com/v0/b/cer3-70e13.appspot.com/o/fondo%2Ffondologin.jpg?alt=media&token=f2f9c770-162f-412d-81b0-76efa0e42558';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _searchImage('fondologin');
     return Scaffold(
-      backgroundColor: Colors.white, 
-      body: Center(
-        child: Container(
-          margin: const EdgeInsets.all(24.0), 
-          padding: const EdgeInsets.all(24.0), 
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.8),
-            borderRadius: BorderRadius.circular(16.0), 
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 3), 
-              ),
-            ],
-          ),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5), 
+      backgroundColor: Colors.white,
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(image: NetworkImage(_imageUrl))),
+        child: Center(
+          child: Container(
+            margin: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(24.0),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.8),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       backgroundColor: Colors.red,
                       textStyle: const TextStyle(fontSize: 18.0),
-                      minimumSize: const Size(double.infinity, 50), 
+                      minimumSize: const Size(double.infinity, 50),
                     ),
                     onPressed: () async {
                       try {
@@ -115,16 +133,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                         if (newUser != null) {
                           setState(() {
-                            errorMessage = ''; 
+                            errorMessage = '';
                           });
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomePage()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
                           );
                         }
                       } catch (e) {
                         setState(() {
-                          errorMessage = 'El usuario o contraseña no son correctos';
+                          errorMessage =
+                              'El usuario o contraseña no son correctos';
                         });
                       }
                     },
