@@ -23,6 +23,31 @@ class FirestoreService {
     });
   }
 
+  Stream<QuerySnapshot> getUserPokemons(String userId) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('pokemons')
+        .snapshots();
+  }
+
+  Future<List<QueryDocumentSnapshot>> searchPokemonsById(String id) async {
+    try {
+      // Realizar la consulta a Firestore
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('pokemones')
+          .where('id', isEqualTo: id)
+          .get();
+
+      // Retornar los documentos encontrados
+      return querySnapshot.docs;
+    } catch (e) {
+      // Manejo de errores
+      print('Error al buscar pokemones por ID: $e');
+      return []; // Retorna una lista vacía en caso de error
+    }
+  }
+
   Future<void> borrarPokemon(String docId) {
     return FirebaseFirestore.instance
         .collection('pokemones')
