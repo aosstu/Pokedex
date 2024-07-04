@@ -11,4 +11,15 @@ class FirestoreService {
         .doc(id)
         .snapshots();
   }
+
+  Future<void> agregarPokemon(String nombre, String tipo, String categoria,
+      String peso, String altura) {
+    return FirebaseFirestore.instance.collection('pokemones').doc().set({
+      'nombre': nombre,
+      'tipo': tipo,
+      'categoria': categoria,
+      'peso': peso,
+      'altura': altura,
+    });
+  }
 }
