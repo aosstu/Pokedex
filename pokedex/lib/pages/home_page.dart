@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pokedex/pages/drawers/drawer_mis_pokemons.dart';
 import 'package:pokedex/pages/drawers/drawer_pokedex.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -12,6 +13,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String displayName = 'Prueba'; // Inicializar con un valor predeterminado
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserDisplayName();
+  }
+
+  void _getUserDisplayName() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final email = user.email ?? 'Prueba';
+      final username = email.split('@')[0];
+      setState(() {
+        displayName = username;
+      });
+    } else {
+      setState(() {
+        displayName = 'Prueba';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Padding(
                     padding: EdgeInsets.all(4),
-                    child: Text('Prueba'),
+                    child: Text(displayName),
                   ),
                 ],
               ),
@@ -88,6 +112,7 @@ class _HomePageState extends State<HomePage> {
               title: Text('Cerrar Sesión'),
               leading: Icon(MdiIcons.exitToApp),
               onTap: () {
+                FirebaseAuth.instance.signOut();
                 MaterialPageRoute rutaDrawers = MaterialPageRoute(
                   builder: (context) {
                     return LoginScreen();
