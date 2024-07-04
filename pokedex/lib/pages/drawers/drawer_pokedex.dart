@@ -17,7 +17,7 @@ class _DrawerPokedex extends State<DrawerPokedex> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pokedex'),
+        title: Text('Pokedex', style: TextStyle(color: Colors.white),),
         centerTitle: true,
         backgroundColor: Colors.red,
       ),
