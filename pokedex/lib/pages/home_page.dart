@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pokedex/pages/drawers/drawer_mis_pokemons.dart';
 import 'package:pokedex/pages/drawers/drawer_pokedex.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pokedex/pages/login.dart';
+import 'package:pokedex/services/firestore_service.dart';
+import 'package:pokedex/services/pokedex_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,12 +16,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String displayName = 'Prueba'; // Inicializar con un valor predeterminado
+  String displayName = 'Prueba'; // Inicializa con un valor predeterminado
+  final PokedexService pokedexService = PokedexService();
+  final FirestoreService firestoreService = FirestoreService();
+
+  late User? _currentUser;
 
   @override
   void initState() {
     super.initState();
     _getUserDisplayName();
+    _getCurrentUser();
+  }
+
+  Future<void> _getCurrentUser() async {
+    _currentUser = FirebaseAuth.instance.currentUser;
+    setState(() {});
   }
 
   void _getUserDisplayName() {
@@ -47,9 +60,32 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.red,
       ),
       //BODY
-      body: Center(
-        child: Text('Informacion cuenta'),
+      body: StreamBuilder<List<Map<String, dynamic>>>(
+        stream:
+            pokedexService.getCapturedPokemonDetailsStream(_currentUser!.uid),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No has capturado ningún Pokémon.'));
+          } else {
+            List<Map<String, dynamic>> capturedPokemonDetails = snapshot.data!;
+            return ListView.builder(
+              itemCount: capturedPokemonDetails.length,
+              itemBuilder: (context, index) {
+                var pokemon = capturedPokemonDetails[index];
+                return ListTile(
+                  title: Text('Nombre: ${pokemon['nombre']}'),
+                  subtitle: Text('Tipo: ${pokemon['tipo']}'),
+                );
+              },
+            );
+          }
+        },
       ),
+
+      floatingActionButton:
+          FloatingActionButton(child: Icon(MdiIcons.plus), onPressed: () {}),
       //DRAWER
       drawer: Drawer(
         backgroundColor: Colors.white,

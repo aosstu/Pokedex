@@ -23,11 +23,10 @@ class FirestoreService {
     });
   }
 
-  Stream<QuerySnapshot> getUserPokemons(String userId) {
+  Stream<DocumentSnapshot> getUserPokemons(String userId) {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .collection('pokemons')
         .snapshots();
   }
 
