@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pokedex/pages/details_page.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:pokedex/services/firestore_service.dart';
 
 class PokemonList extends StatelessWidget {
   final snapshot;
@@ -23,31 +25,76 @@ class PokemonList extends StatelessWidget {
                 color: Colors.black,
                 width: 1,
               )),
-          child: ListTile(
-              leading: Icon(MdiIcons.pokeball),
-              title: Text('${pokemon['nombre']}'),
-              tileColor: Colors.transparent,
-              trailing: SizedBox(
-                height: 100,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(MdiIcons.paw),
-                    Text(
-                      'Detalles',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ],
+          child: Slidable(
+            endActionPane: ActionPane(
+              motion: ScrollMotion(),
+              children: [
+                SlidableAction(
+                  icon: MdiIcons.trashCan,
+                  label: 'Eliminar',
+                  backgroundColor: Colors.red,
+                  onPressed: (context) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Confirmar eliminación'),
+                          content: Text(
+                              '¿Estás seguro de que deseas eliminar este Pokémon?'),
+                          actions: [
+                            TextButton(
+                              child: Text(
+                                'Cancelar',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text(
+                                'Eliminar',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () {
+                                FirestoreService().borrarPokemon(pokemon.id);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 ),
-              ),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailsPage(
-                          pokemonNombre: pokemon['nombre'], pokemon: pokemon),
-                    ));
-              }),
+              ],
+            ),
+            child: ListTile(
+                leading: Icon(MdiIcons.pokeball),
+                title: Text('${pokemon['nombre']}'),
+                tileColor: Colors.transparent,
+                trailing: SizedBox(
+                  height: 100, // Adjust the width as needed
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(MdiIcons.paw),
+                      Text(
+                        'Detalles',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailsPage(
+                            pokemonNombre: pokemon['nombre'], pokemon: pokemon),
+                      ));
+                }),
+          ),
         );
       },
       separatorBuilder: (context, index) => const Divider(

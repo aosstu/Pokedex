@@ -22,4 +22,11 @@ class FirestoreService {
       'altura': altura,
     });
   }
+
+  Future<void> borrarPokemon(String docId) {
+    return FirebaseFirestore.instance
+        .collection('pokemones')
+        .doc(docId)
+        .delete();
+  }
 }
