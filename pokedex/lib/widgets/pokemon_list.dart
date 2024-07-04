@@ -28,7 +28,7 @@ class PokemonList extends StatelessWidget {
               title: Text('${pokemon['nombre']}'),
               tileColor: Colors.transparent,
               trailing: SizedBox(
-                height: 100, // Adjust the width as needed
+                height: 100,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

@@ -6,16 +6,13 @@ class ImageSearch extends StatefulWidget {
   @override
   _ImageSearchState createState() => _ImageSearchState();
 }
-
 class _ImageSearchState extends State<ImageSearch> {
   String? _imageUrl;
   String _searchText = '';
 
   Future<void> _searchImage(String searchText) async {
-    // Normalizar el texto de entrada
     final normalizedText = searchText.trim();
 
-    // Buscar la imagen en Firebase Storage
     final storageRef =
         FirebaseStorage.instance.ref().child('images/$normalizedText.png');
 

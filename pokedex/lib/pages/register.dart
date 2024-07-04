@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pokedex/pages/home_page.dart';
-import 'package:pokedex/pages/register.dart'; 
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _auth = FirebaseAuth.instance;
   late String email;
   late String password;
+  late String confirmPassword;
   String errorMessage = '';
   String _imageUrl = '';
 
@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Error al buscar la imagen: $e');
       setState(() {
         _imageUrl =
-            'https://firebasestorage.googleapis.com/v0/b/cer3-70e13.appspot.com/o/fondo%2Ffondologin.jpg?alt=media&token=f2f9c770-162f-412d-81b0-76efa0e42558';
+            'https://firebasestorage.googleapis.com/v0/b/cer3-70e13.appspot.com/o/fondo%2Ffondoregister.jpg?alt=media&token=54debc48-913d-4607-8029-fe13a538188c';
       });
     }
   }
@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _searchImage('fondologin');
+    _searchImage('fondoregister');
   }
 
   @override
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
         fit: StackFit.expand,
         children: [
           _buildBackgroundImage(),
-          _buildLoginForm(),
+          _buildRegisterForm(),
         ],
       ),
     );
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLoginForm() {
+  Widget _buildRegisterForm() {
     return Center(
       child: SingleChildScrollView(
         child: Container(
@@ -85,14 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const Text(
-                'Bienvenido a la ',
-                style: TextStyle(
-                  fontSize: 32.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Text(
-                'Pokedex',
+                'Crear Cuenta',
                 style: TextStyle(
                   fontSize: 32.0,
                   fontWeight: FontWeight.bold,
@@ -100,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 8.0),
               const Text(
-                'Inicia sesión para continuar',
+                'Regístrate para continuar',
                 style: TextStyle(
                   fontSize: 16.0,
                 ),
@@ -133,6 +126,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
+              const SizedBox(height: 16.0),
+              TextField(
+                obscureText: true,
+                onChanged: (value) {
+                  confirmPassword = value;
+                },
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.lock),
+                  hintText: 'Confirmar Contraseña',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+              ),
               if (errorMessage.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -150,8 +157,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   minimumSize: const Size(double.infinity, 50),
                 ),
                 onPressed: () async {
+                  if (password != confirmPassword) {
+                    setState(() {
+                      errorMessage = 'Las contraseñas no coinciden';
+                    });
+                    return;
+                  }
+
                   try {
-                    final newUser = await _auth.signInWithEmailAndPassword(
+                    final newUser = await _auth.createUserWithEmailAndPassword(
                       email: email,
                       password: password,
                     );
@@ -168,33 +182,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                   } catch (e) {
                     setState(() {
-                      errorMessage = 'El usuario o contraseña no son correctos';
+                      errorMessage = 'Error al registrar el usuario';
                     });
                   }
                 },
                 child: const Text(
-                  'Iniciar sesión',
+                  'Registrarse',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
               const SizedBox(height: 16.0),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const RegisterScreen(),
-                    ),
-                  );
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
                 },
-                child: Text(
-                  '¿No tienes cuenta? Regístrate',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Color(0xFF030FF8),
-                    decoration: TextDecoration.underline,
-
-                  ),
+                child: const Text(
+                  'Volver atrás',
+                  
+                  style: TextStyle(color: Colors.blue, fontSize: 18.0,),
                 ),
               ),
             ],

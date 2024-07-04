@@ -19,15 +19,12 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     super.initState();
-    // Llamar a la función para buscar la imagen al iniciar la pantalla
     _searchImage(widget.pokemonNombre);
   }
 
   Future<void> _searchImage(String searchText) async {
-    // Normalizar el texto de entrada
     final normalizedText = searchText.trim().toLowerCase();
 
-    // Buscar la imagen en Firebase Storage
     final storageRef =
         FirebaseStorage.instance.ref().child('images/$normalizedText.png');
 
@@ -51,20 +48,18 @@ class _DetailsPageState extends State<DetailsPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Mostrar la imagen encontrada encima de los detalles
           if (_imageUrl != null)
             Card(
               elevation: 4,
               margin: EdgeInsets.all(16),
               child: Image.network(_imageUrl!, fit: BoxFit.cover),
             ),
-          // Detalles del Pokémon
           Padding(
               padding: const EdgeInsets.all(16.0),
               child: Card(
-                elevation: 4, // Sombra de la tarjeta
+                elevation: 4, 
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15), // Borde redondeado
+                  borderRadius: BorderRadius.circular(15), 
                   // Borde azul
                 ),
                 child: Padding(
@@ -73,10 +68,10 @@ class _DetailsPageState extends State<DetailsPage> {
                     Text(
                       '${widget.pokemon['nombre']}',
                       style: TextStyle(
-                        fontSize: 20, // Tamaño de fuente grande
-                        fontWeight: FontWeight.bold, // Texto en negrita
-                        color: Colors.black, // Color verde para el tipo
-                        fontFamily: 'Roboto', // Ejemplo de fuente personalizada
+                        fontSize: 20, 
+                        fontWeight: FontWeight.bold, 
+                        color: Colors.black, 
+                        fontFamily: 'Roboto', 
                       ),
                     ),
                     SizedBox(height: 10),
@@ -86,7 +81,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         fontSize: 18,
                         color: Colors.green,
                       ),
-                    ), // Espacio entre textos
+                    ), 
                     Text(
                       'Altura: ${widget.pokemon['altura']}',
                       style: TextStyle(

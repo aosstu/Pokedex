@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final String? subtitulo; // Parámetro opcional para el subtítulo
+  final String? subtitulo; 
 
   const CustomAppBar({
     Key? key,
     required this.title,
-    this.subtitulo, // Subtítulo puede ser null si no se proporciona
+    this.subtitulo, 
   }) : super(key: key);
 
   @override
@@ -17,7 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(title),
-          if (subtitulo != null) // Mostrar el subtítulo si se proporciona
+          if (subtitulo != null) 
             Text(
               subtitulo!,
               style: TextStyle(fontSize: 14.0),
@@ -25,8 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       centerTitle: true,
-      backgroundColor: Colors.red, // Color de fondo del app bar
-      // Puedes personalizar más propiedades del AppBar aquí según tus necesidades
+      backgroundColor: Colors.red, 
     );
   }
 
