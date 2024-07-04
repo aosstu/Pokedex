@@ -12,7 +12,6 @@ class ChecklistWidget extends StatelessWidget {
       children: [
         ListTile(
           title: Text('Nombre: ${document['nombre']}'),
-          // Otros elementos de la lista según los campos del documento
         ),
         ListTile(
           title: Text('Tipo: ${document['tipo']}'),
@@ -26,7 +25,6 @@ class ChecklistWidget extends StatelessWidget {
         ListTile(
           title: Text('Peso: ${document['peso']}'),
         ),
-        // Agrega más ListTiles según los campos que desees mostrar
       ],
     );
   }

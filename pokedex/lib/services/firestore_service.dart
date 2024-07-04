@@ -32,18 +32,16 @@ class FirestoreService {
 
   Future<List<QueryDocumentSnapshot>> searchPokemonsById(String id) async {
     try {
-      // Realizar la consulta a Firestore
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('pokemones')
           .where('id', isEqualTo: id)
           .get();
 
-      // Retornar los documentos encontrados
       return querySnapshot.docs;
     } catch (e) {
       // Manejo de errores
       print('Error al buscar pokemones por ID: $e');
-      return []; // Retorna una lista vacía en caso de error
+      return []; 
     }
   }
 
