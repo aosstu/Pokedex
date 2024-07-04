@@ -5,17 +5,22 @@ import 'package:pokedex/pages/pokemon_agregar.dart';
 import 'package:pokedex/services/firestore_service.dart';
 import 'package:pokedex/widgets/pokemon_list.dart';
 
-class TabPokedex extends StatefulWidget {
-  const TabPokedex({super.key});
+class DrawerPokedex extends StatefulWidget {
+  const DrawerPokedex({super.key});
 
   @override
-  State<TabPokedex> createState() => _TabPokedexState();
+  State<DrawerPokedex> createState() => _DrawerPokedex();
 }
 
-class _TabPokedexState extends State<TabPokedex> {
+class _DrawerPokedex extends State<DrawerPokedex> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Pokedex'),
+        centerTitle: true,
+        backgroundColor: Colors.red,
+      ),
       body: Padding(
         padding: EdgeInsets.all(8),
         child: StreamBuilder(
