@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final String? subtitulo; 
+  final String? subtitulo;
 
   const CustomAppBar({
     Key? key,
     required this.title,
-    this.subtitulo, 
+    this.subtitulo,
   }) : super(key: key);
 
   @override
@@ -16,16 +16,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text(title),
-          if (subtitulo != null) 
+          Text(
+            title,
+            style: TextStyle(color: Colors.white),
+          ),
+          if (subtitulo != null)
             Text(
               subtitulo!,
-              style: TextStyle(fontSize: 14.0),
+              style: TextStyle(fontSize: 14.0, color: Colors.white),
             ),
         ],
       ),
       centerTitle: true,
-      backgroundColor: Colors.red, 
+      backgroundColor: Colors.red,
     );
   }
 

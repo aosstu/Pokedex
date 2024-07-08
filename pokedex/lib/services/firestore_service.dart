@@ -12,14 +12,17 @@ class FirestoreService {
         .snapshots();
   }
 
-  Future<void> agregarPokemon(String nombre, String tipo, String categoria,
-      String peso, String altura) {
+  Future<void> agregarPokemon(
+      String nombre, String tipo, String categoria, int peso, int altura,
+      {String? tipo2}) {
     return FirebaseFirestore.instance.collection('pokemones').doc().set({
       'nombre': nombre,
       'tipo': tipo,
+      'tipo2': tipo2 ?? '',
       'categoria': categoria,
       'peso': peso,
       'altura': altura,
+      'capturado': false,
     });
   }
 
@@ -30,7 +33,7 @@ class FirestoreService {
         .snapshots();
   }
 
-  Future<List<QueryDocumentSnapshot>> searchPokemonsById(String id) async {
+  /* Future<List<QueryDocumentSnapshot>> searchPokemonsById(String id) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('pokemones')
@@ -41,14 +44,32 @@ class FirestoreService {
     } catch (e) {
       // Manejo de errores
       print('Error al buscar pokemones por ID: $e');
-      return []; 
+      return [];
     }
-  }
+  } */
 
   Future<void> borrarPokemon(String docId) {
     return FirebaseFirestore.instance
         .collection('pokemones')
         .doc(docId)
         .delete();
+  }
+
+  Future<void> capturarPokemon(String docId) {
+    return FirebaseFirestore.instance
+        .collection('pokemones')
+        .doc(docId)
+        .update({'capturado': true});
+  }
+
+  Future<void> liberarPokemon(String docId) {
+    return FirebaseFirestore.instance
+        .collection('pokemones')
+        .doc(docId)
+        .update({'capturado': false});
+  }
+
+  Future<QuerySnapshot> tipos() {
+    return FirebaseFirestore.instance.collection('tipos').get();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:pokedex/services/firestore_service.dart';
 import 'package:pokedex/widgets/appbar.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -55,38 +56,32 @@ class _DetailsPageState extends State<DetailsPage> {
               child: Image.network(_imageUrl!, fit: BoxFit.cover),
             ),
           Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Card(
-                elevation: 4, 
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15), 
-                  // Borde azul
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(children: [
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+                // Borde azul
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
                     Text(
                       '${widget.pokemon['nombre']}',
                       style: TextStyle(
-                        fontSize: 20, 
-                        fontWeight: FontWeight.bold, 
-                        color: Colors.black, 
-                        fontFamily: 'Roboto', 
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontFamily: 'Roboto',
                       ),
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Tipo: ${widget.pokemon['tipo']}',
+                      'Tipo: ${widget.pokemon['tipo']}${widget.pokemon['tipo2'] != '' ? '/${widget.pokemon['tipo2']}' : ''}',
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.green,
-                      ),
-                    ), 
-                    Text(
-                      'Altura: ${widget.pokemon['altura']}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.blue,
                       ),
                     ),
                     Text(
@@ -97,15 +92,49 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                     ),
                     Text(
-                      'Peso: ${widget.pokemon['peso']}',
+                      'Altura: ${widget.pokemon['altura']} m',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    Text(
+                      'Peso: ${widget.pokemon['peso']} Kg',
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.purple,
                       ),
                     ),
-                  ]),
+                    Text(
+                      'Estado: ${widget.pokemon['capturado'] ? 'Capturado' : 'No capturado'}',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: widget.pokemon['capturado']
+                              ? Colors.green
+                              : Colors.red),
+                    ),
+                  ],
                 ),
-              ))
+              ),
+            ),
+          ),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                if (widget.pokemon['capturado']) {
+                  FirestoreService().liberarPokemon(widget.pokemon.id);
+                  Navigator.pop(context);
+                } else {
+                  FirestoreService().capturarPokemon(widget.pokemon.id);
+                  Navigator.pop(context);
+                }
+              },
+              child: Text(widget.pokemon['capturado']
+                  ? 'Liberar Pokémon'
+                  : 'Capturar Pokémon'),
+            ),
+          ),
         ],
       ),
     );

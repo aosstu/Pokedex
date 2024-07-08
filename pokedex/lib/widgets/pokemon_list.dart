@@ -26,6 +26,15 @@ class PokemonList extends StatelessWidget {
                 width: 1,
               )),
           child: Slidable(
+            startActionPane: ActionPane(motion: ScrollMotion(), children: [
+              SlidableAction(
+                  icon: MdiIcons.pokeball,
+                  label: 'Capturar',
+                  backgroundColor: Colors.green,
+                  onPressed: (context) {
+                    FirestoreService().capturarPokemon(pokemon.id);
+                  })
+            ]),
             endActionPane: ActionPane(
               motion: ScrollMotion(),
               children: [

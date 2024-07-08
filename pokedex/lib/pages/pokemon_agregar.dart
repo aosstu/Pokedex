@@ -10,10 +10,11 @@ class AgregarPokemon extends StatefulWidget {
 
 class _AgregarPokemonState extends State<AgregarPokemon> {
   TextEditingController nombreCtrl = TextEditingController();
-  TextEditingController tipoCtrl = TextEditingController();
   TextEditingController categoriaCtrl = TextEditingController();
   TextEditingController pesoCtrl = TextEditingController();
   TextEditingController alturaCtrl = TextEditingController();
+  String tipo = '';
+  String tipo2 = '';
 
   final formKey = GlobalKey<FormState>();
 
@@ -21,7 +22,10 @@ class _AgregarPokemonState extends State<AgregarPokemon> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Agregar Pokemon', style: TextStyle(color: Colors.white),),
+        title: Text(
+          'Agregar Pokemon',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.red,
         centerTitle: true,
       ),
@@ -72,20 +76,81 @@ class _AgregarPokemonState extends State<AgregarPokemon> {
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: TextFormField(
-                    controller: tipoCtrl,
-                    decoration: InputDecoration(
-                      hintText: 'Tipo',
-                      border: InputBorder.none,
-                    ),
-                    validator: (tipo) {
-                      if (tipo!.isEmpty) {
-                        return 'El tipo es requerido';
+                  child: FutureBuilder(
+                    future: FirestoreService().tipos(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (!snapshot.hasData ||
+                          snapshot.connectionState == ConnectionState.waiting) {
+                        return Text('Cargando tipos');
+                      } else {
+                        var tipos = snapshot.data!.docs;
+                        return DropdownButtonFormField<String>(
+                          value: tipo == '' ? null : tipo,
+                          decoration: InputDecoration(labelText: 'Tipo'),
+                          items: tipos.map<DropdownMenuItem<String>>((tipo) {
+                            return DropdownMenuItem<String>(
+                              child: Text(tipo['tipo']),
+                              value: tipo['tipo'],
+                            );
+                          }).toList(),
+                          onChanged: (tipoSeleccionado) {
+                            setState(() {
+                              this.tipo = tipoSeleccionado!;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'El tipo es requerido';
+                            }
+                            return null;
+                          },
+                        );
                       }
-                      if (tipo.length < 3) {
-                        return 'El tipo debe tener más de 3 caracteres';
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.grey.shade400,
+                    width: 1,
+                  ),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: FutureBuilder(
+                    future: FirestoreService().tipos(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (!snapshot.hasData ||
+                          snapshot.connectionState == ConnectionState.waiting) {
+                        return Text('Cargando tipos');
+                      } else {
+                        var tipos2 = snapshot.data!.docs;
+                        return DropdownButtonFormField<String>(
+                          value: tipo2 == '' ? null : tipo2,
+                          decoration: InputDecoration(
+                            labelText: 'Segundo Tipo (Opcional)',
+                          ),
+                          items: tipos2.map<DropdownMenuItem<String>>((tipo2) {
+                            return DropdownMenuItem<String>(
+                              child: Text(tipo2['tipo']),
+                              value: tipo2['tipo'],
+                            );
+                          }).toList(),
+                          onChanged: (tipoSeleccionado) {
+                            setState(() {
+                              this.tipo2 = tipoSeleccionado!;
+                            });
+                          },
+                          validator: (value) {
+                            return null;
+                          },
+                        );
                       }
-                      return null;
                     },
                   ),
                 ),
@@ -133,14 +198,19 @@ class _AgregarPokemonState extends State<AgregarPokemon> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextFormField(
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
                     controller: pesoCtrl,
                     decoration: InputDecoration(
-                      hintText: 'Peso',
+                      hintText: 'Peso (Kg)',
                       border: InputBorder.none,
                     ),
                     validator: (peso) {
                       if (peso!.isEmpty) {
                         return 'El peso es requerido';
+                      }
+                      if (double.tryParse(peso.replaceAll(',', '.')) == null) {
+                        return 'Por favor ingresa un número válido';
                       }
                       return null;
                     },
@@ -160,14 +230,20 @@ class _AgregarPokemonState extends State<AgregarPokemon> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextFormField(
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
                     controller: alturaCtrl,
                     decoration: InputDecoration(
-                      hintText: 'Altura',
+                      hintText: 'Altura (m)',
                       border: InputBorder.none,
                     ),
                     validator: (altura) {
                       if (altura!.isEmpty) {
                         return 'La altura es requerida';
+                      }
+                      if (double.tryParse(altura.replaceAll(',', '.')) ==
+                          null) {
+                        return 'Por favor ingresa un número válido';
                       }
                       return null;
                     },
@@ -179,7 +255,8 @@ class _AgregarPokemonState extends State<AgregarPokemon> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.red,
                     padding: EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -187,12 +264,22 @@ class _AgregarPokemonState extends State<AgregarPokemon> {
                   ),
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
+                      double peso = double.parse(
+                          pesoCtrl.text.trim().replaceAll(',', '.'));
+                      double altura = double.parse(
+                          alturaCtrl.text.trim().replaceAll(',', '.'));
+
+                      // Convertir los valores a enteros
+                      int pesoInt = peso.round();
+                      int alturaInt = altura.round();
+
                       FirestoreService().agregarPokemon(
                         nombreCtrl.text.trim(),
-                        tipoCtrl.text.trim(),
+                        this.tipo,
                         categoriaCtrl.text.trim(),
-                        pesoCtrl.text.trim(),
-                        alturaCtrl.text.trim(),
+                        pesoInt,
+                        alturaInt,
+                        tipo2: this.tipo2,
                       );
                       Navigator.pop(context);
                     }
