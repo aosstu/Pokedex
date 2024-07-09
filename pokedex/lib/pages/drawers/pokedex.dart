@@ -3,21 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pokedex/pages/pokemon_agregar.dart';
 import 'package:pokedex/services/firestore_service.dart';
+import 'package:pokedex/widgets/drawer.dart';
 import 'package:pokedex/widgets/pokemon_list.dart';
 
-class DrawerPokedex extends StatefulWidget {
-  const DrawerPokedex({super.key});
+class Pokedex extends StatefulWidget {
+  const Pokedex({super.key});
 
   @override
-  State<DrawerPokedex> createState() => _DrawerPokedex();
+  State<Pokedex> createState() => _DrawerPokedex();
 }
 
-class _DrawerPokedex extends State<DrawerPokedex> {
+class _DrawerPokedex extends State<Pokedex> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pokedex', style: TextStyle(color: Colors.white),),
+        title: Text(
+          'Pokedex',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         backgroundColor: Colors.red,
       ),
@@ -32,7 +36,7 @@ class _DrawerPokedex extends State<DrawerPokedex> {
                 child: CircularProgressIndicator(),
               );
             } else {
-              return PokemonList(snapshot: snapshot);
+              return PokemonList(snapshot: snapshot, isPokedex: true);
             }
           },
         ),
@@ -55,6 +59,7 @@ class _DrawerPokedex extends State<DrawerPokedex> {
           );
         },
       ),
+      drawer: DrawerWidget(),
     );
   }
 }

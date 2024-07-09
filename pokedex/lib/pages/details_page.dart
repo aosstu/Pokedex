@@ -131,8 +131,8 @@ class _DetailsPageState extends State<DetailsPage> {
                 }
               },
               child: Text(widget.pokemon['capturado']
-                  ? 'Liberar Pokémon'
-                  : 'Capturar Pokémon'),
+                  ? 'Liberar Pokemon'
+                  : 'Capturar Pokemon'),
             ),
           ),
         ],

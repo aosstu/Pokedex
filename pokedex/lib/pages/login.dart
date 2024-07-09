@@ -3,8 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pokedex/pages/drawers/mis_pokemons.dart';
 import 'package:pokedex/pages/home_page.dart';
-import 'package:pokedex/pages/register.dart'; 
+import 'package:pokedex/pages/register.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -164,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomePage(),
+                          builder: (context) => MisPokemones(),
                         ),
                       );
                     }
@@ -195,7 +196,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     fontSize: 16.0,
                     color: Color(0xFF030FF8),
                     decoration: TextDecoration.underline,
-
                   ),
                 ),
               ),
