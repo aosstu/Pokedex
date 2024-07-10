@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pokedex/pages/details_page.dart';
 import 'package:pokedex/widgets/drawer.dart';
 import 'package:pokedex/widgets/pokemon_list.dart';
 
@@ -11,7 +9,7 @@ class MisPokemones extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Mis Pokémones',
+          'Mis Pokémons',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,

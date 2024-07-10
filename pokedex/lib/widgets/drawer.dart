@@ -37,9 +37,12 @@ class DrawerWidget extends StatelessWidget {
                   height: 100,
                   width: 150,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(width: 2.0, color: Colors.red),
-                  ),
+                      shape: BoxShape.circle,
+                      border: Border.all(width: 2.0, color: Colors.red),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            'https://firebasestorage.googleapis.com/v0/b/cer3-70e13.appspot.com/o/entrenadores%2Fentrenador.jfif?alt=media&token=27090579-3eea-4aa6-b04b-5cc6fe479e82'),
+                      )),
                 ),
                 Padding(
                   padding: EdgeInsets.all(4),
@@ -65,7 +68,7 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             textColor: Colors.black,
             iconColor: Colors.red,
-            title: Text('Mis pokémones'),
+            title: Text('Mis pokémons'),
             leading: Icon(MdiIcons.inbox),
             onTap: () {
               Navigator.pop(context); // Cierra el Drawer antes de navegar
@@ -79,7 +82,7 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             textColor: Colors.black,
             iconColor: Colors.red,
-            title: Text('Pokedex'),
+            title: Text('Pokédex'),
             leading: Icon(MdiIcons.pokeball),
             onTap: () {
               Navigator.pop(context); // Cierra el Drawer antes de navegar

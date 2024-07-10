@@ -1,9 +1,6 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pokedex/pages/drawers/mis_pokemons.dart';
 import 'package:pokedex/pages/home_page.dart';
 import 'package:pokedex/pages/register.dart';
 
@@ -95,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const Text(
-                'Pokedex',
+                'Pokédex',
                 style: TextStyle(
                   fontSize: 32.0,
                   fontWeight: FontWeight.bold,
@@ -165,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MisPokemones(),
+                          builder: (context) => HomePage(),
                         ),
                       );
                     }

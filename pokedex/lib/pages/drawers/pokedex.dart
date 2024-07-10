@@ -19,7 +19,7 @@ class _DrawerPokedex extends State<Pokedex> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Pokedex',
+          'Pokédex',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
